@@ -4,7 +4,7 @@ date: "2026-02-28"
 category: "AI/ML"
 tags: ["ai", "mental-models"]
 summary: "Stop thinking about models as magic boxes. Start thinking about them as very fast, very confident pattern matchers."
-draft: false
+draft: true
 ---
 
 Stop thinking about models as magic boxes. Start thinking about them as very fast, very confident pattern matchers.
