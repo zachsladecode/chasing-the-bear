@@ -1,0 +1,131 @@
+/* =============================================================
+   Chasing the Bear — Brand Tokens & Global Styles
+   Direction: dark, minimal, warm. Readable for long-form tech content.
+   ============================================================= */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* -------------------------------------------------------------
+   Color Tokens
+   ------------------------------------------------------------- */
+:root {
+  /* Backgrounds */
+  --color-bg: #0f0f0f;
+  --color-surface: #1a1a1a;
+  --color-surface-raised: #242424;
+
+  /* Text */
+  --color-text: #e8e6e1;
+  --color-text-muted: #8a8a8a;
+
+  /* Accent — warm amber */
+  --color-accent: #e8a048;
+  --color-accent-hover: #f0b567;
+
+  /* Borders */
+  --color-border: #2e2e2e;
+}
+
+/* -------------------------------------------------------------
+   Typography Tokens
+   ------------------------------------------------------------- */
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Type scale */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.25rem;   /* 20px */
+  --text-2xl:  1.5rem;    /* 24px */
+  --text-3xl:  1.875rem;  /* 30px */
+  --text-4xl:  2.25rem;   /* 36px */
+
+  /* Line heights */
+  --leading-tight:  1.25;
+  --leading-snug:   1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+}
+
+/* -------------------------------------------------------------
+   Spacing Tokens
+   ------------------------------------------------------------- */
+:root {
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Layout */
+  --max-width-prose: 68ch;
+  --max-width-wide:  1100px;
+}
+
+/* -------------------------------------------------------------
+   Base Reset & Global Styles
+   ------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  min-height: 100vh;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+code, pre, kbd {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+pre {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow-x: auto;
+  padding: var(--space-4) var(--space-6);
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}
