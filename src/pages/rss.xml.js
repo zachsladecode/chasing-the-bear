@@ -1,16 +1,19 @@
 import rss from '@astrojs/rss';
-import { publishedPosts } from '../data/posts';
+import { getCollection } from 'astro:content';
 
 export async function GET(context) {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
   return rss({
     title: 'Chasing the Bear',
     description: 'Notes on AI, software, and learning in public.',
     site: context.site,
-    items: publishedPosts.map((post) => ({
-      title: post.title,
-      pubDate: new Date(post.date),
-      description: post.summary,
-      link: `/blog/${post.slug}/`,
+    items: posts.map((post) => ({
+      title: post.data.title,
+      pubDate: post.data.date,
+      description: post.data.summary,
+      link: `/blog/${post.id}/`,
     })),
     customData: '<language>en-us</language>',
   });

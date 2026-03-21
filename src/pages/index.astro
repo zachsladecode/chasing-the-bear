@@ -1,33 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 
-const recentPosts = [
-  {
-    title: 'What Even Is a Git Worktree?',
-    date: '2026-03-21',
-    summary: 'You have been switching branches and stashing work for years. There is a better way — and it has been in Git the whole time.',
-    slug: 'what-is-a-git-worktree',
-    category: 'Software Engineering',
-    tags: ['git', 'tooling', 'workflow'],
-  },
-  {
-    title: 'Building in Public: Why I Started This Blog',
-    date: '2026-03-10',
-    summary: 'Learning happens in scattered notes. This blog gives it a home, an audience, and a forcing function to go deeper.',
-    slug: 'building-in-public',
-    category: 'Meta',
-    tags: ['writing', 'learning'],
-  },
-  {
-    title: 'The Mental Model That Changed How I Think About AI',
-    date: '2026-02-28',
-    summary: 'Stop thinking about models as magic boxes. Start thinking about them as very fast, very confident pattern matchers.',
-    slug: 'mental-model-for-ai',
-    category: 'AI/ML',
-    tags: ['ai', 'mental-models'],
-  },
-];
+const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
 ---
 
 <BaseLayout title="Chasing the Bear" description="Notes on AI, software, and learning in public.">
@@ -52,12 +30,12 @@ const recentPosts = [
 
     {recentPosts.map((post) => (
       <PostCard
-        title={post.title}
-        date={post.date}
-        summary={post.summary}
-        slug={post.slug}
-        category={post.category}
-        tags={post.tags}
+        title={post.data.title}
+        date={post.data.date.toISOString().split('T')[0]}
+        summary={post.data.summary}
+        slug={post.id}
+        category={post.data.category}
+        tags={post.data.tags}
       />
     ))}
 
