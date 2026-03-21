@@ -11,7 +11,9 @@ interface Props {
 
 const { title, date, category, tags = [], body } = Astro.props;
 
-const formattedDate = new Date(date).toLocaleDateString('en-US', {
+// Parse date parts directly to avoid UTC-to-local timezone shift on YYYY-MM-DD strings
+const [year, month, day] = date.split('-').map(Number);
+const formattedDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',

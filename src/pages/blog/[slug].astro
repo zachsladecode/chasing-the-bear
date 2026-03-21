@@ -1,5 +1,6 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
+import { Code } from 'astro:components';
 
 // Placeholder posts — will be replaced by Astro content collections in CTB-011
 export function getStaticPaths() {
@@ -39,7 +40,7 @@ const { post } = Astro.props;
   <p>The typical workflow: you are deep in a feature branch, someone pings you about a bug on main, you stash everything, switch branches, fix the bug, switch back, pop the stash, try to remember where you were. It works, but it is friction.</p>
 
   <h2>What a Worktree Does</h2>
-  <pre><code class="language-bash"># Add a new worktree for the hotfix branch
+  <Code lang="bash" theme="github-dark" code={`# Add a new worktree for the hotfix branch
 git worktree add ../chasing-the-bear-hotfix hotfix/urgent-bug
 
 # Work in it like a normal repo
@@ -47,7 +48,7 @@ cd ../chasing-the-bear-hotfix
 git commit -am "fix: patch the thing"
 
 # Remove it when done
-git worktree remove ../chasing-the-bear-hotfix</code></pre>
+git worktree remove ../chasing-the-bear-hotfix`} />
 
   <p>Both directories share the same object store and refs — no duplication, instant checkout.</p>
 
