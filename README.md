@@ -15,17 +15,6 @@ Live at [chasingthebear.net](https://chasingthebear.net)
 
 > Setup instructions coming in CTB-002 once the Astro project is initialized.
 
-```bash
-# Install dependencies
-npm install
-
-# Start dev server
-npm run dev
-
-# Build for production
-npm run build
-```
-
 ## License
 
 Code is MIT licensed. See [LICENSE](./LICENSE).
