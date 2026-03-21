@@ -1,30 +1,45 @@
 ---
-title: "Building in Public: Why I Started This Blog"
-date: "2026-03-10"
+title: "Why I Started Chasing the Bear"
+date: "2026-03-21"
 category: "Meta"
-tags: ["writing", "learning"]
-summary: "Learning happens in scattered notes. This blog gives it a home, an audience, and a forcing function to go deeper."
+tags: ["writing", "learning", "meta"]
+summary: "The bear is here, and it's very real. I stopped running from it. I started chasing it."
 draft: false
+author: "Zach Slade Code"
 ---
 
-Learning happens in scattered notes. This blog gives it a home, an audience, and a forcing function to go deeper.
+Multiple people have asked me lately how work has been going. It's become a somewhat anxiety-inducing question.
 
-For years my learning process looked like this: read something interesting, take a few notes, move on. The notes accumulated in apps and folders I never revisited. The understanding felt real in the moment, but it didn't stick — and it definitely didn't compound.
+The analogy that keeps coming to mind, over and over again, is being chased by a bear.
 
-## The Problem with Private Notes
+The classic version of the story goes like this: two hikers encounter a bear. One starts lacing up their running shoes. The other says, "you can't outrun a bear." The first replies, "I don't need to outrun the bear. I just need to outrun you."
 
-Private notes are low-stakes. There is no pressure to be clear, no need to explain your reasoning, no audience to disappoint. That sounds freeing, but it is actually the thing that makes them useless. Writing that no one will read is writing you do not really have to commit to.
+It's a good analogy for a lot of things. But it's a difficult one to sit with when the person running next to you is a coworker or a friend — someone you genuinely want to see succeed. Gone are the days of hoarding knowledge to preserve your position. That playbook doesn't work anymore, and honestly, it never should have.
 
-## Writing as a Forcing Function
+## The bear is real
 
-Explaining something in public forces a different kind of thinking. You have to anticipate confusion. You have to check your assumptions. You have to decide what the point actually is before you start typing.
+The landscape of software engineering is shifting faster than I've ever seen. It requires a continuous investment just to stay current. And the bear isn't slowing down — if anything, as we approach what could very well be a kind of singularity, it's getting bigger.
 
-That friction is the value. The blog post is not the output — the understanding you had to build to write it is.
+That's the anxiety underneath the question. It's not about any single technology or any single job. It's the pace itself. The feeling that no matter how much you learn, the gap between where you are and where you need to be is always moving.
 
-## Why Now
+## The reaction is the part I can control
 
-I have been learning a lot — about AI, about software, about how systems actually work versus how they are described. And I keep having the same experience: I think I understand something until I try to explain it, and then I realize I only understood the surface.
+I can't control what tomorrow looks like. I can't control the bear.
 
-This blog is an experiment in going deeper. In public.
+What I can control is my reaction to it.
 
-> The best way to understand something is to explain it to someone else. Writing is just explaining to the future.
+For a long time, my reaction was to run. To stay heads-down, accumulate notes, move fast, and hope that was enough. And somewhere along the way I realized: that's still running. You're still behind the bear. The anxiety doesn't go away just because you're moving.
+
+So I changed directions.
+
+I stopped trying to outrun the field and started trying to understand it — in public, out loud, in writing. The act of explaining something forces a different kind of thinking than consuming it does. You find the gaps. You check the assumptions. You build something that lasts longer than a highlights folder.
+
+## Welcome to chasingthebear.net
+
+This blog is that change of direction made concrete.
+
+It's a place for notes on AI, software engineering, and what it looks like to build things when the tools are moving this fast. Not polished retrospectives — notes from the trail, written while I'm still on it.
+
+I stopped running from the bear. I started chasing it.
+
+Welcome.
