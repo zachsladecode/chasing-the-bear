@@ -9,11 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint:md": "markdownlint --config .markdownlintrc.json src/content/blog"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.17",
     "@astrojs/sitemap": "^3.7.1",
     "astro": "^6.0.8"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.48.0"
   }
 }
