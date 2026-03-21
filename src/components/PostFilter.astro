@@ -1,0 +1,216 @@
+---
+interface PostMeta {
+  title: string;
+  slug: string;
+  date: string;
+  category: string;
+  tags: string[];
+  summary: string;
+  author?: string;
+}
+
+interface Props {
+  posts: PostMeta[];
+}
+
+const { posts } = Astro.props;
+
+const categories = ['All', ...Array.from(new Set(posts.map((p) => p.category))).sort()];
+const tags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
+---
+
+<div class="filter-bar" id="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Category</span>
+    <div class="filter-pills" role="group" aria-label="Filter by category">
+      {categories.map((cat) => (
+        <button
+          class="filter-pill"
+          data-filter-type="category"
+          data-filter-value={cat === 'All' ? '' : cat}
+          aria-pressed={cat === 'All' ? 'true' : 'false'}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {tags.length > 0 && (
+    <div class="filter-group">
+      <span class="filter-label">Tag</span>
+      <div class="filter-pills" role="group" aria-label="Filter by tag">
+        <button
+          class="filter-pill"
+          data-filter-type="tag"
+          data-filter-value=""
+          aria-pressed="true"
+        >
+          All
+        </button>
+        {tags.map((tag) => (
+          <button
+            class="filter-pill"
+            data-filter-type="tag"
+            data-filter-value={tag}
+            aria-pressed="false"
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <p class="filter-count" id="filter-count" aria-live="polite"></p>
+</div>
+
+<script define:vars={{ posts }}>
+  const filterBar = document.getElementById('filter-bar');
+  const postCards = document.querySelectorAll('[data-post-slug]');
+  const countEl = document.getElementById('filter-count');
+
+  let activeCategory = '';
+  let activeTag = '';
+
+  function getParams() {
+    const params = new URLSearchParams(window.location.search);
+    activeCategory = params.get('category') || '';
+    activeTag = params.get('tag') || '';
+  }
+
+  function applyFilters() {
+    let visible = 0;
+
+    postCards.forEach((card) => {
+      const category = card.dataset.postCategory || '';
+      const tags = JSON.parse(card.dataset.postTags || '[]');
+
+      const categoryMatch = !activeCategory || category === activeCategory;
+      const tagMatch = !activeTag || tags.includes(activeTag);
+      const show = categoryMatch && tagMatch;
+
+      card.hidden = !show;
+      if (show) visible++;
+    });
+
+    if (countEl) {
+      countEl.textContent = visible === postCards.length
+        ? ''
+        : `${visible} post${visible !== 1 ? 's' : ''} shown`;
+    }
+  }
+
+  function updatePills() {
+    document.querySelectorAll('[data-filter-type="category"]').forEach((btn) => {
+      const match = btn.dataset.filterValue === activeCategory;
+      btn.setAttribute('aria-pressed', String(match));
+    });
+    document.querySelectorAll('[data-filter-type="tag"]').forEach((btn) => {
+      const match = btn.dataset.filterValue === activeTag;
+      btn.setAttribute('aria-pressed', String(match));
+    });
+  }
+
+  function updateURL() {
+    const params = new URLSearchParams();
+    if (activeCategory) params.set('category', activeCategory);
+    if (activeTag) params.set('tag', activeTag);
+    const search = params.toString();
+    history.replaceState(null, '', search ? `?${search}` : window.location.pathname);
+  }
+
+  function handlePillClick(e) {
+    const btn = e.target.closest('[data-filter-type]');
+    if (!btn) return;
+
+    const type = btn.dataset.filterType;
+    const value = btn.dataset.filterValue;
+
+    if (type === 'category') activeCategory = value;
+    if (type === 'tag') activeTag = value;
+
+    updatePills();
+    applyFilters();
+    updateURL();
+  }
+
+  // Initialise from URL params on load
+  getParams();
+  updatePills();
+  applyFilters();
+
+  filterBar?.addEventListener('click', handlePillClick);
+
+  // Show the filter bar (hidden by default so noscript sees nothing)
+  filterBar?.removeAttribute('hidden');
+</script>
+
+<noscript>
+  <style>#filter-bar { display: none; }</style>
+</noscript>
+
+<style>
+  /* Component-scoped styles — see docs/architecture.md#styling */
+
+  .filter-bar {
+    max-width: var(--max-width-prose);
+    margin-bottom: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+    min-width: 4rem;
+  }
+
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filter-pill {
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: var(--space-1) var(--space-3);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .filter-pill:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+  }
+
+  .filter-pill[aria-pressed="true"] {
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .filter-count {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    min-height: 1em;
+  }
+</style>
