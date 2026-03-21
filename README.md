@@ -13,7 +13,16 @@ Live at [chasingthebear.net](https://chasingthebear.net)
 
 ## Local Development
 
-> Setup instructions coming in CTB-002 once the Astro project is initialized.
+```bash
+# Install dependencies
+npm install
+
+# Start dev server (http://localhost:4321)
+npm run dev
+
+# Build for production
+npm run build
+```
 
 ## License
 
