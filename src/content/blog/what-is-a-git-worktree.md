@@ -39,6 +39,6 @@ Both directories share the same object store and refs — no duplication, instan
 
 ## When Not To
 
-Worktrees share the index, so you cannot check out the same branch in two worktrees. And they add a little mental overhead — if you are not juggling multiple branches regularly, `git stash` is fine.
+Each worktree has its own `HEAD` and index, but they share the same refs. Because of this, Git prevents you from checking out the same branch in two worktrees simultaneously — doing so would mean two worktrees updating the same ref independently, which would corrupt the branch. They also add a little mental overhead — if you are not juggling multiple branches regularly, `git stash` is fine.
 
 > The right tool depends on your workflow. But if you find yourself stashing and switching multiple times a day, worktrees are worth learning.
