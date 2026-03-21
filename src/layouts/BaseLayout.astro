@@ -4,12 +4,20 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: 'website' | 'article';
+  canonicalUrl?: string;
 }
 
 const {
   title = 'Chasing the Bear',
   description = 'Notes on AI, software, and learning in public.',
+  ogType = 'website',
+  canonicalUrl = Astro.url.href,
 } = Astro.props;
+
+const siteUrl = 'https://chasingthebear.net';
+const ogImage = `${siteUrl}/og-default.png`;
+const fullTitle = title === 'Chasing the Bear' ? title : `${title} — Chasing the Bear`;
 ---
 
 <!doctype html>
@@ -17,9 +25,30 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Primary meta -->
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Chasing the Bear" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Feeds -->
+    <link rel="alternate" type="application/rss+xml" title="Chasing the Bear RSS Feed" href="/rss.xml" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
   </head>
   <body>
     <header class="site-header">
