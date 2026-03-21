@@ -1,17 +1,140 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
 
+const recentPosts = [
+  {
+    title: 'What Even Is a Git Worktree?',
+    date: '2026-03-21',
+    summary: 'You have been switching branches and stashing work for years. There is a better way — and it has been in Git the whole time.',
+    slug: 'what-is-a-git-worktree',
+    category: 'Software Engineering',
+    tags: ['git', 'tooling', 'workflow'],
+  },
+  {
+    title: 'Building in Public: Why I Started This Blog',
+    date: '2026-03-10',
+    summary: 'Learning happens in scattered notes. This blog gives it a home, an audience, and a forcing function to go deeper.',
+    slug: 'building-in-public',
+    category: 'Meta',
+    tags: ['writing', 'learning'],
+  },
+  {
+    title: 'The Mental Model That Changed How I Think About AI',
+    date: '2026-02-28',
+    summary: 'Stop thinking about models as magic boxes. Start thinking about them as very fast, very confident pattern matchers.',
+    slug: 'mental-model-for-ai',
+    category: 'AI/ML',
+    tags: ['ai', 'mental-models'],
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Chasing the Bear" description="Notes on AI, software, and learning in public.">
+  <section class="hero">
+    <h1 class="hero-title">Chasing the Bear</h1>
+    <p class="hero-tagline">Notes on AI, software, and learning in public.</p>
+  </section>
+
+  <section class="about-blurb">
+    <p>
+      This is where I write about what I'm actually learning — not polished retrospectives, but notes from the trail.
+      Topics drift between AI/ML, software engineering, and the craft of building things that matter.
+      Written by Zach, a developer who believes the best way to understand something is to explain it.
+    </p>
+  </section>
+
+  <section class="recent-posts">
+    <div class="section-header">
+      <h2 class="section-title">Recent Posts</h2>
+      <a href="/blog" class="view-all">View all posts &rarr;</a>
+    </div>
+
+    {recentPosts.map((post) => (
+      <PostCard
+        title={post.title}
+        date={post.date}
+        summary={post.summary}
+        slug={post.slug}
+        category={post.category}
+        tags={post.tags}
+      />
+    ))}
+
+    <a href="/blog" class="view-all-bottom">View all posts &rarr;</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    margin-bottom: var(--space-12);
+  }
+
+  .hero-title {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-tagline {
+    font-size: var(--text-xl);
+    color: var(--color-text-muted);
+    line-height: var(--leading-snug);
+  }
+
+  .about-blurb {
+    max-width: var(--max-width-prose);
+    margin-bottom: var(--space-16);
+    padding: var(--space-6);
+    background-color: var(--color-surface);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .about-blurb p {
+    color: var(--color-text-muted);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-3);
+  }
+
+  .section-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .view-all {
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .view-all-bottom {
+    display: inline-block;
+    margin-top: var(--space-8);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: var(--text-3xl);
+    }
+
+    .hero-tagline {
+      font-size: var(--text-lg);
+    }
+  }
+</style>
