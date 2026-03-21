@@ -1,21 +1,11 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
 import { Code } from 'astro:components';
+import { publishedPosts } from '../../data/posts';
 
-// Placeholder posts — will be replaced by Astro content collections in CTB-011
+// CTB-011: getStaticPaths will be replaced by Astro content collections
 export function getStaticPaths() {
-  const posts = [
-    {
-      slug: 'what-is-a-git-worktree',
-      title: 'What Even Is a Git Worktree?',
-      date: '2026-03-21',
-      category: 'Software Engineering',
-      tags: ['git', 'tooling', 'workflow'],
-      body: 'You have been switching branches and stashing work for years. There is a better way.',
-    },
-  ];
-
-  return posts.map((post) => ({
+  return publishedPosts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));

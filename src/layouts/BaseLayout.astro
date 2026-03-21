@@ -17,7 +17,6 @@ const {
 
 const siteUrl = 'https://chasingthebear.net';
 const ogImage = `${siteUrl}/og-default.png`;
-const fullTitle = title === 'Chasing the Bear' ? title : `${title} — Chasing the Bear`;
 ---
 
 <!doctype html>
@@ -27,13 +26,13 @@ const fullTitle = title === 'Chasing the Bear' ? title : `${title} — Chasing t
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Primary meta -->
-    <title>{fullTitle}</title>
+    <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
-    <meta property="og:title" content={fullTitle} />
+    <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
@@ -41,7 +40,7 @@ const fullTitle = title === 'Chasing the Bear' ? title : `${title} — Chasing t
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
