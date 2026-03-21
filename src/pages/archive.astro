@@ -5,8 +5,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+// Derive year from ISO date string to avoid UTC-to-local timezone shift
+// (same pattern as PostLayout.astro — see docs/architecture.md#styling)
 const postsByYear = posts.reduce((acc, post) => {
-  const year = post.data.date.getFullYear().toString();
+  const year = post.data.date.toISOString().split('T')[0].split('-')[0];
   if (!acc[year]) acc[year] = [];
   acc[year].push(post);
   return acc;
