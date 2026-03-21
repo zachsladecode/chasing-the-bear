@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import TerminalHeader from '../components/TerminalHeader';
 
 interface Props {
   title: string;
@@ -31,25 +32,38 @@ const readingTime = Math.ceil(wordCount / 200);
     <header class="post-header">
       <a href="/blog" class="back-link">&larr; All posts</a>
 
-      <div class="post-meta">
-        <time datetime={date}>{formattedDate}</time>
-        <span class="meta-sep">&middot;</span>
-        <span class="reading-time">{readingTime} min read</span>
-        {author && (
-          <>
-            <span class="meta-sep">&middot;</span>
-            <span class="post-author">{author}</span>
-          </>
-        )}
-        {category && (
-          <>
-            <span class="meta-sep">&middot;</span>
-            <span class="post-category">{category}</span>
-          </>
-        )}
+      <!--
+        SEO / accessibility: full header content stays in the DOM, visually hidden.
+        TerminalHeader (aria-hidden) types it out character by character for sighted users.
+        See docs/architecture.md#styling for the scoped-styles pattern.
+      -->
+      <div class="post-header-static" aria-hidden="false">
+        <div class="post-meta">
+          <time datetime={date}>{formattedDate}</time>
+          <span class="meta-sep">&middot;</span>
+          <span class="reading-time">{readingTime} min read</span>
+          {author && (
+            <>
+              <span class="meta-sep">&middot;</span>
+              <span class="post-author">{author}</span>
+            </>
+          )}
+          {category && (
+            <>
+              <span class="meta-sep">&middot;</span>
+              <span class="post-category">{category}</span>
+            </>
+          )}
+        </div>
+        <h1 class="post-title">{title}</h1>
       </div>
 
-      <h1 class="post-title">{title}</h1>
+      <TerminalHeader
+        title={title}
+        date={date}
+        category={category ?? ''}
+        client:load
+      />
 
       {tags.length > 0 && (
         <ul class="post-tags" aria-label="Tags">
@@ -93,6 +107,19 @@ const readingTime = Math.ceil(wordCount / 200);
 
   .post-header {
     margin-bottom: var(--space-12);
+  }
+
+  /* Static header: visually hidden but accessible to screen readers + SEO */
+  .post-header-static {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .post-meta {
@@ -140,6 +167,7 @@ const readingTime = Math.ceil(wordCount / 200);
     flex-wrap: wrap;
     gap: var(--space-2);
     list-style: none;
+    margin-top: var(--space-6);
   }
 
   .post-tag {
@@ -150,6 +178,54 @@ const readingTime = Math.ceil(wordCount / 200);
     border-radius: 4px;
     padding: var(--space-1) var(--space-2);
     font-family: var(--font-mono);
+  }
+
+  /* TerminalHeader global styles */
+  :global(.th-header) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-4);
+    line-height: var(--leading-snug);
+  }
+
+  :global(.th-line) {
+    margin-bottom: var(--space-2);
+  }
+
+  :global(.th-prompt) {
+    color: var(--color-accent);
+    user-select: none;
+  }
+
+  :global(.th-title) {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight);
+  }
+
+  :global(.th-meta) {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  :global(.th-cursor) {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.1em;
+    background: var(--color-accent);
+    vertical-align: text-bottom;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  :global(.th-header--done .th-title) {
+    display: block;
   }
 
   /* Prose styles for rendered Markdown */
@@ -253,7 +329,7 @@ const readingTime = Math.ceil(wordCount / 200);
   }
 
   @media (max-width: 640px) {
-    .post-title {
+    :global(.th-title) {
       font-size: var(--text-3xl);
     }
   }
