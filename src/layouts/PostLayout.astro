@@ -7,9 +7,11 @@ interface Props {
   category?: string;
   tags?: string[];
   body: string;
+  summary?: string;
+  author?: string;
 }
 
-const { title, date, category, tags = [], body } = Astro.props;
+const { title, date, category, tags = [], body, summary, author } = Astro.props;
 
 // Parse date parts directly to avoid UTC-to-local timezone shift on YYYY-MM-DD strings
 const [year, month, day] = date.split('-').map(Number);
@@ -23,7 +25,7 @@ const wordCount = body.trim().split(/\s+/).length;
 const readingTime = Math.ceil(wordCount / 200);
 ---
 
-<BaseLayout title={`${title} — Chasing the Bear`} description={title}>
+<BaseLayout title={`${title} — Chasing the Bear`} description={summary ?? title}>
   <article class="post">
     <header class="post-header">
       <a href="/blog" class="back-link">&larr; All posts</a>
@@ -32,6 +34,12 @@ const readingTime = Math.ceil(wordCount / 200);
         <time datetime={date}>{formattedDate}</time>
         <span class="meta-sep">&middot;</span>
         <span class="reading-time">{readingTime} min read</span>
+        {author && (
+          <>
+            <span class="meta-sep">&middot;</span>
+            <span class="post-author">{author}</span>
+          </>
+        )}
         {category && (
           <>
             <span class="meta-sep">&middot;</span>
@@ -90,6 +98,11 @@ const readingTime = Math.ceil(wordCount / 200);
     gap: var(--space-2);
     margin-bottom: var(--space-4);
     flex-wrap: wrap;
+  }
+
+  .post-author {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
   }
 
   .post-meta time,

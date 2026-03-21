@@ -22,6 +22,8 @@ const dateStr = post.data.date.toISOString().split('T')[0];
   category={post.data.category}
   tags={post.data.tags}
   body={post.data.summary}
+  summary={post.data.summary}
+  author={post.data.author}
 >
   <Content />
 </PostLayout>
