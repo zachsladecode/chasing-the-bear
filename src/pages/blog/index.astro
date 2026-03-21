@@ -46,6 +46,12 @@ const postMeta = posts.map((p) => ({
 </BaseLayout>
 
 <style>
+  /* Component-scoped styles — see docs/architecture.md#styling */
+
+  .post-list > div:first-child .post-card {
+    padding-top: 0;
+  }
+
   .page-header {
     display: flex;
     align-items: baseline;

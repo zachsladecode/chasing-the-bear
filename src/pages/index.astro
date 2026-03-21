@@ -44,6 +44,8 @@ const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
 </BaseLayout>
 
 <style>
+  /* Component-scoped styles — see docs/architecture.md#styling */
+
   .hero {
     margin-bottom: var(--space-12);
   }

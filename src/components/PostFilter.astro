@@ -6,6 +6,7 @@ interface PostMeta {
   category: string;
   tags: string[];
   summary: string;
+  author?: string;
 }
 
 interface Props {
@@ -150,6 +151,8 @@ const tags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
 </noscript>
 
 <style>
+  /* Component-scoped styles — see docs/architecture.md#styling */
+
   .filter-bar {
     max-width: var(--max-width-prose);
     margin-bottom: var(--space-8);
