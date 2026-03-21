@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — Chasing the Bear" description="Zach Slade writes about AI, software engineering, and learning in public at chasingthebear.net.">
+  <section class="about">
+    <h1 class="about-title">About</h1>
+
+    <div class="about-body">
+      <p>
+        Multiple people have asked me lately how work has been going. It's become a somewhat anxiety-inducing question.
+      </p>
+      <p>
+        The analogy that keeps coming to mind is being chased by a bear.
+      </p>
+      <p>
+        The classic version of the story: two hikers encounter a bear. One starts lacing up their running shoes.
+        The other says, "you can't outrun a bear." The first replies, "I don't need to outrun the bear. I just need to outrun you."
+      </p>
+      <p>
+        It's a difficult analogy to sit with when the person running next to you is a coworker or a friend — someone
+        you genuinely want to see succeed. Gone are the days of hoarding knowledge to preserve your position.
+        That playbook doesn't work anymore.
+      </p>
+      <p>
+        The landscape of software engineering is shifting faster than I've ever seen. It requires a continuous
+        investment just to stay current. And as we approach what could very well be a kind of singularity,
+        the bear keeps getting bigger.
+      </p>
+      <p>
+        I can't control what tomorrow looks like. I can't control the bear. What I can control is my reaction to it.
+      </p>
+      <p>
+        I stopped running from the bear. I started chasing it.
+      </p>
+
+      <h2>What this is</h2>
+      <p>
+        Chasing the Bear is a place for me to learn in public. Notes on AI and software engineering —
+        not polished retrospectives, but things I'm figuring out while I figure them out.
+      </p>
+      <p>
+        The act of writing something for a reader forces a different kind of thinking than just consuming it.
+        You find the gaps. You check the assumptions. You build something that lasts longer than a highlights folder.
+        That friction is the value.
+      </p>
+
+      <h2>Who's writing</h2>
+      <p>
+        I'm Zach Slade — a developer interested in how AI is reshaping software engineering and what it means
+        to keep building things that matter while the tools underneath you are moving.
+      </p>
+      <p>
+        You can find the source for this site on <a href="https://github.com/zachsladecode/chasing-the-bear" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Component-scoped styles — see docs/architecture.md#styling */
+
+  .about {
+    max-width: var(--max-width-prose);
+  }
+
+  .about-title {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-12);
+  }
+
+  .about-body p {
+    color: var(--color-text);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-6);
+  }
+
+  .about-body h2 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);;
+  }
+
+  .about-body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .about-body a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  @media (max-width: 640px) {
+    .about-title {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>
