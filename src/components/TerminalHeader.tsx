@@ -40,6 +40,12 @@ export default function TerminalHeader({ title, date, category }: Props) {
       ? lines[currentPhase as Exclude<Phase, 'done'>].slice(0, charIndex)
       : '';
 
+  function wrapContent(phase: Exclude<Phase, 'done'>, text: string) {
+    if (phase === 'date') return <time class="th-meta">{text}</time>;
+    if (phase === 'category') return <span class="th-meta">{text}</span>;
+    return text;
+  }
+
   function skip() {
     setSkipped(true);
   }
@@ -116,12 +122,13 @@ export default function TerminalHeader({ title, date, category }: Props) {
     <div class="th-header" aria-hidden="true">
       {completedPhases.map((phase) => (
         <p key={phase} class={`th-line${phase === 'title' ? ' th-line--title' : ''}`}>
-          <span class="th-prompt">&gt;</span> {lines[phase]}
+          <span class="th-prompt">&gt;</span>{' '}
+          {wrapContent(phase, lines[phase])}
         </p>
       ))}
       <p class={`th-line${currentPhase === 'title' ? ' th-line--title' : ''}`}>
         <span class="th-prompt">&gt;</span>{' '}
-        {currentLine}
+        {currentPhase !== 'done' && wrapContent(currentPhase as Exclude<Phase, 'done'>, currentLine)}
         <span class="th-cursor" />
       </p>
     </div>
