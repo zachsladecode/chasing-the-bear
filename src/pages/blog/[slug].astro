@@ -1,0 +1,67 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+
+// Placeholder posts — will be replaced by Astro content collections in CTB-011
+export function getStaticPaths() {
+  const posts = [
+    {
+      slug: 'what-is-a-git-worktree',
+      title: 'What Even Is a Git Worktree?',
+      date: '2026-03-21',
+      category: 'Software Engineering',
+      tags: ['git', 'tooling', 'workflow'],
+      body: 'You have been switching branches and stashing work for years. There is a better way.',
+    },
+  ];
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<PostLayout
+  title={post.title}
+  date={post.date}
+  category={post.category}
+  tags={post.tags}
+  body={post.body}
+>
+  <!-- CTB-011: This slot will render Markdown via Astro content collections -->
+  <p>You have been switching branches and stashing work for years. There is a better way.</p>
+
+  <p>A Git worktree lets you check out multiple branches of the same repo simultaneously — each in its own directory, sharing one <code>.git</code> folder.</p>
+
+  <h2>The Problem</h2>
+  <p>The typical workflow: you are deep in a feature branch, someone pings you about a bug on main, you stash everything, switch branches, fix the bug, switch back, pop the stash, try to remember where you were. It works, but it is friction.</p>
+
+  <h2>What a Worktree Does</h2>
+  <pre><code class="language-bash"># Add a new worktree for the hotfix branch
+git worktree add ../chasing-the-bear-hotfix hotfix/urgent-bug
+
+# Work in it like a normal repo
+cd ../chasing-the-bear-hotfix
+git commit -am "fix: patch the thing"
+
+# Remove it when done
+git worktree remove ../chasing-the-bear-hotfix</code></pre>
+
+  <p>Both directories share the same object store and refs — no duplication, instant checkout.</p>
+
+  <h2>When to Use It</h2>
+  <ul>
+    <li>Reviewing a PR without leaving your current branch</li>
+    <li>Running a long build in one branch while continuing work in another</li>
+    <li>Keeping a <code>main</code> worktree always ready for hotfixes</li>
+  </ul>
+
+  <h2>When Not To</h2>
+  <p>Worktrees share the index, so you cannot check out the same branch in two worktrees. And they add a little mental overhead — if you are not juggling multiple branches regularly, <code>git stash</code> is fine.</p>
+
+  <blockquote>
+    <p>The right tool depends on your workflow. But if you find yourself stashing and switching multiple times a day, worktrees are worth learning.</p>
+  </blockquote>
+</PostLayout>
