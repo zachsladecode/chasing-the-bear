@@ -3,7 +3,8 @@ title: "Your Post Title"
 date: "2026-01-01"
 category: "Software Engineering"
 tags: ["tag-one", "tag-two"]
-summary: "One or two sentences describing this post. Shown in post cards and RSS."
+summary: "One or two sentences describing this post. Used as the meta description, shown in post cards and RSS."
+author: "Zach Slade"
 draft: true
 ---
 

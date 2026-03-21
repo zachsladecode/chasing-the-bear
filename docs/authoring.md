@@ -19,17 +19,21 @@ Everything you need to write and publish a post on [chasingthebear.net](https://
 
 ## Filename Convention
 
-Use the slug only — no date prefix. The date lives in frontmatter.
+Use the slug only — no date prefix. The date lives in frontmatter and drives sorting and display.
 
 ```
 src/content/blog/what-is-a-git-worktree.md   ✓
 src/content/blog/2026-03-21-git-worktree.md  ✗
 ```
 
-**Slug rules:**
-- Lowercase letters, numbers, and hyphens only
-- No spaces or underscores
-- Should match the URL you want: `slug.md` → `/blog/slug`
+**Slug rules (aligned with [Google's URL structure guidelines](https://developers.google.com/search/docs/crawling-indexing/url-structure)):**
+- Lowercase letters, numbers, and hyphens only — no spaces, underscores, or special characters
+- Keep slugs short and descriptive — they appear directly in the URL (`/blog/your-slug`)
+- Avoid repeating words unnecessarily; prefer `/git-worktrees` over `/what-is-a-git-worktree-explained`
+- Do not use query parameters or session IDs in filenames
+- Slugs are permanent once published — changing a slug breaks inbound links and loses SEO value
+
+> **Future:** Hierarchical URL structure (`/blog/2026/03/what-is-a-git-worktree`) is a potential improvement for discoverability and crawling. This requires routing changes and is tracked separately.
 
 ---
 
@@ -43,18 +47,20 @@ title: "Your Post Title"
 date: "2026-03-21"
 category: "Software Engineering"
 tags: ["git", "tooling"]
-summary: "One or two sentences. Shown in post cards and RSS."
+summary: "One or two sentences. Used as the page meta description and shown in post cards and RSS."
+author: "Zach Slade"
 draft: false
 ---
 ```
 
 | Field | Type | Required | Notes |
 |-------|------|----------|-------|
-| `title` | string | Yes | Shown in the post header, `<title>` tag, and OG tags |
+| `title` | string | Yes | Shown in the post header, `<title>` tag, and OG/Twitter cards |
 | `date` | string (`YYYY-MM-DD`) | Yes | Publication date. Used for sorting and display |
 | `category` | string | Yes | Must be an exact match from the allowed list below |
 | `tags` | string array | No | Lowercase, hyphenated. Used for filtering (CTB-013) |
-| `summary` | string | Yes | 1–2 sentences. Shown in post cards, RSS, and meta description |
+| `summary` | string | Yes | 1–2 sentences. Used as the page `<meta name="description">`, OG description, post cards, and RSS |
+| `author` | string | No | Author display name. Shown in the post header. Supports multiple authors as the blog grows |
 | `draft` | boolean | No | Defaults to `false`. Set to `true` to hide from the site |
 
 ---
@@ -64,10 +70,10 @@ draft: false
 Use these exact strings — they are case-sensitive:
 
 - `Software Engineering`
-- `AI / Machine Learning`
+- `AI/ML`
 - `Meta`
 
-If you need a new category, add it to this list and update the Zod schema in `src/content.config.ts` if you add validation for it.
+If you need a new category, add it to this list and discuss before publishing — categories drive filtering and should stay stable.
 
 ---
 
@@ -76,7 +82,13 @@ If you need a new category, add it to this list and update the Zod schema in `sr
 - `draft: true` — post is excluded from the homepage, `/blog`, RSS, and sitemap at build time
 - `draft: false` — post is live on the next deploy
 
-You can push a draft to the repo safely; it will never appear on the public site until you change the flag and push again.
+**Draft posts in a public repo:** Since this repo is public, any committed file — including drafts — is visible in the git history. For posts you want to keep private until publication:
+
+- **Option A (recommended):** Write in Notion and only commit to the repo on publication day, with `draft: false` from the start.
+- **Option B:** Commit as `draft: true` on a non-`main` branch; merge to main only when ready to publish.
+- **Option C:** Use a private fork for drafts and open a PR to the public repo when ready.
+
+Option A is the simplest and keeps the public repo clean.
 
 ---
 
@@ -103,3 +115,13 @@ git push origin main
 GitHub Actions picks up the push, builds the site, and deploys to GitHub Pages. The post is live within ~1 minute.
 
 To publish a draft you have already pushed, update `draft: false` and push again.
+
+---
+
+## Multiple Authors
+
+The `author` field in frontmatter supports multiple contributors. Each author sets their own name in their posts. If you invite collaborators:
+
+1. Add them as a contributor in the GitHub repo settings.
+2. Ask them to follow this guide and set `author` in their frontmatter.
+3. Per-author archive pages and filtering are a future enhancement.
