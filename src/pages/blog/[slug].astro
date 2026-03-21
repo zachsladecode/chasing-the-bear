@@ -24,6 +24,7 @@ const dateStr = post.data.date.toISOString().split('T')[0];
   body={post.data.summary}
   summary={post.data.summary}
   author={post.data.author}
+  currentSlug={post.id}
 >
   <Content />
 </PostLayout>

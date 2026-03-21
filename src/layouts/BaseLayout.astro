@@ -1,11 +1,13 @@
 ---
 import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
 
 interface Props {
   title?: string;
   description?: string;
   ogType?: 'website' | 'article';
   canonicalUrl?: string;
+  currentSlug?: string;
 }
 
 const {
@@ -13,6 +15,7 @@ const {
   description = 'Notes on AI, software, and learning in public.',
   ogType = 'website',
   canonicalUrl = Astro.url.href,
+  currentSlug,
 } = Astro.props;
 
 const siteUrl = 'https://chasingthebear.net';
@@ -62,9 +65,12 @@ const ogImage = `${siteUrl}/og-default.png`;
       </div>
     </header>
 
-    <main>
-      <slot />
-    </main>
+    <div class="page-wrapper">
+      <Sidebar currentSlug={currentSlug} />
+      <main>
+        <slot />
+      </main>
+    </div>
 
     <footer class="site-footer">
       <div class="container">
@@ -122,11 +128,19 @@ const ogImage = `${siteUrl}/og-default.png`;
     text-decoration: none;
   }
 
-  main {
+  .page-wrapper {
     max-width: var(--max-width-wide);
     margin: 0 auto;
     padding: var(--space-16) var(--space-6);
     min-height: calc(100vh - 200px);
+    display: flex;
+    gap: var(--space-12);
+    align-items: flex-start;
+  }
+
+  main {
+    flex: 1;
+    min-width: 0;
   }
 
   .site-footer {
@@ -151,12 +165,20 @@ const ogImage = `${siteUrl}/og-default.png`;
     color: var(--color-accent);
   }
 
+  @media (max-width: 768px) {
+    .page-wrapper {
+      flex-direction: column;
+      padding: var(--space-12) var(--space-4);
+      gap: 0;
+    }
+  }
+
   @media (max-width: 640px) {
     .site-nav {
       gap: var(--space-4);
     }
 
-    main {
+    .page-wrapper {
       padding: var(--space-8) var(--space-4);
     }
   }

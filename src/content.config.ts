@@ -27,6 +27,7 @@ const blog = defineCollection({
       .min(50, 'Summary must be at least 50 characters')
       .max(155, 'Summary must be 155 characters or fewer (meta description limit)'),
     author: z.string().optional(),
+    series: z.string().optional(),
     draft: z.boolean(), // no default — must be explicitly set in every post
   }),
 });
