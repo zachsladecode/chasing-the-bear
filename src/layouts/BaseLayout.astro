@@ -1,0 +1,132 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Chasing the Bear',
+  description = 'Notes on AI, software, and learning in public.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="site-logo">Chasing the Bear</a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/blog">Blog</a>
+          <a href="/about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; {new Date().getFullYear()} Chasing the Bear &mdash; <a href="https://github.com/zachsladecode/chasing-the-bear" target="_blank" rel="noopener">Source on GitHub</a></p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-4) 0;
+  }
+
+  .container {
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-logo {
+    font-weight: 700;
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .site-logo:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .site-nav {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .site-nav a {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .site-nav a:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  main {
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    padding: var(--space-16) var(--space-6);
+    min-height: calc(100vh - 200px);
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-8) 0;
+  }
+
+  .site-footer .container {
+    display: block;
+  }
+
+  .site-footer p {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer a {
+    color: var(--color-text-muted);
+  }
+
+  .site-footer a:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .site-nav {
+      gap: var(--space-4);
+    }
+
+    main {
+      padding: var(--space-8) var(--space-4);
+    }
+  }
+</style>
