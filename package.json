@@ -14,9 +14,11 @@
     "lint:posts": "node scripts/lint-posts.js"
   },
   "dependencies": {
+    "@astrojs/preact": "^5.0.2",
     "@astrojs/rss": "^4.0.17",
     "@astrojs/sitemap": "^3.7.1",
-    "astro": "^6.0.8"
+    "astro": "^6.0.8",
+    "preact": "^10.29.0"
   },
   "devDependencies": {
     "gray-matter": "^4.0.3",

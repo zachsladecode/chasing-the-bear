@@ -9,9 +9,10 @@ interface Props {
   body: string;
   summary?: string;
   author?: string;
+  currentSlug?: string;
 }
 
-const { title, date, category, tags = [], body, summary, author } = Astro.props;
+const { title, date, category, tags = [], body, summary, author, currentSlug } = Astro.props;
 
 // Parse date parts directly to avoid UTC-to-local timezone shift on YYYY-MM-DD strings
 const [year, month, day] = date.split('-').map(Number);
@@ -25,7 +26,7 @@ const wordCount = body.trim().split(/\s+/).length;
 const readingTime = Math.ceil(wordCount / 200);
 ---
 
-<BaseLayout title={`${title} — Chasing the Bear`} description={summary ?? title}>
+<BaseLayout title={`${title} — Chasing the Bear`} description={summary ?? title} currentSlug={currentSlug}>
   <article class="post">
     <header class="post-header">
       <a href="/blog" class="back-link">&larr; All posts</a>
