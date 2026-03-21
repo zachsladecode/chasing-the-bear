@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
 
-const CHAR_DELAY = 18; // ms per character — body types faster than header
+const CHAR_DELAY = 8; // ms per character — body types faster than header
 
 type Block = {
   el: Element;

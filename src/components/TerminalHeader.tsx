@@ -6,7 +6,7 @@ interface Props {
   category: string;
 }
 
-const CHAR_DELAY = 50; // ms per character
+const CHAR_DELAY = 22; // ms per character
 const LINE_PAUSE = 300; // ms pause before starting next line
 
 type Phase = 'title' | 'date' | 'category' | 'done';
@@ -96,9 +96,9 @@ export default function TerminalHeader({ title, date, category }: Props) {
   if (isDone) {
     return (
       <div class="th-header th-header--done">
-        <p class="th-line">
+        <p class="th-line th-line--title">
           <span class="th-prompt" aria-hidden="true">&gt;</span>{' '}
-          <span class="th-title">{title}</span>
+          {title}
         </p>
         <p class="th-line">
           <span class="th-prompt" aria-hidden="true">&gt;</span>{' '}
@@ -115,11 +115,11 @@ export default function TerminalHeader({ title, date, category }: Props) {
   return (
     <div class="th-header" aria-hidden="true">
       {completedPhases.map((phase) => (
-        <p key={phase} class="th-line">
+        <p key={phase} class={`th-line${phase === 'title' ? ' th-line--title' : ''}`}>
           <span class="th-prompt">&gt;</span> {lines[phase]}
         </p>
       ))}
-      <p class="th-line">
+      <p class={`th-line${currentPhase === 'title' ? ' th-line--title' : ''}`}>
         <span class="th-prompt">&gt;</span>{' '}
         {currentLine}
         <span class="th-cursor" />
