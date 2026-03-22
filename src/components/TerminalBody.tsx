@@ -22,7 +22,6 @@ function buildBlocks(source: HTMLElement): Block[] {
   return Array.from(source.children).map((child) => {
     const clone = child.cloneNode(true) as Element;
     if (clone.tagName === 'PRE') {
-      // Code blocks: keep content intact, reveal instantly when reached
       return { el: clone, segments: null };
     }
     return { el: clone, segments: collectSegments(clone) };
@@ -54,8 +53,33 @@ export default function TerminalBody() {
     let rafId: number;
     let done = false;
 
-    // Append first block shell
-    if (blocks.length > 0) container.appendChild(blocks[0].el);
+    // Cursor element — same style as the header cursor
+    const cursor = document.createElement('span');
+    cursor.className = 'tb-cursor';
+
+    function placeCursor(textNode: Text) {
+      const parent = textNode.parentNode;
+      if (!parent) return;
+      const next = textNode.nextSibling;
+      if (next === cursor) return; // already in place
+      if (next) {
+        parent.insertBefore(cursor, next);
+      } else {
+        parent.appendChild(cursor);
+      }
+    }
+
+    function removeCursor() {
+      cursor.parentNode?.removeChild(cursor);
+    }
+
+    // Append first block shell and place cursor at its first segment
+    if (blocks.length > 0) {
+      container.appendChild(blocks[0].el);
+      if (blocks[0].segments?.length) {
+        placeCursor(blocks[0].segments[0].node);
+      }
+    }
 
     function isBelowFold(): boolean {
       const last = container!.lastElementChild;
@@ -67,7 +91,7 @@ export default function TerminalBody() {
       if (done) return;
       done = true;
       cancelAnimationFrame(rafId);
-      // Fill current + append + fill all remaining blocks
+      removeCursor();
       for (let i = bi; i < blocks.length; i++) {
         if (i > bi) container!.appendChild(blocks[i].el);
         if (blocks[i].segments) {
@@ -82,7 +106,12 @@ export default function TerminalBody() {
     document.addEventListener('keydown', revealAll, { once: true });
 
     function tick(now: number) {
-      if (done || bi >= blocks.length) return;
+      if (done) return;
+
+      if (bi >= blocks.length) {
+        removeCursor();
+        return;
+      }
 
       // Pause while last-appended element is past the fold
       if (isBelowFold()) {
@@ -98,12 +127,18 @@ export default function TerminalBody() {
 
       const block = blocks[bi];
 
-      // Code block: already fully cloned — advance immediately
+      // Code block: already fully cloned — advance immediately, no cursor
       if (!block.segments) {
+        removeCursor();
         bi++;
         si = 0;
         ci = 0;
-        if (bi < blocks.length) container!.appendChild(blocks[bi].el);
+        if (bi < blocks.length) {
+          container!.appendChild(blocks[bi].el);
+          if (blocks[bi].segments?.length) {
+            placeCursor(blocks[bi].segments[0].node);
+          }
+        }
         rafId = requestAnimationFrame(tick);
         return;
       }
@@ -113,7 +148,15 @@ export default function TerminalBody() {
         bi++;
         si = 0;
         ci = 0;
-        if (bi < blocks.length) container!.appendChild(blocks[bi].el);
+        if (bi < blocks.length) {
+          container!.appendChild(blocks[bi].el);
+          if (blocks[bi].segments?.length) {
+            placeCursor(blocks[bi].segments[0].node);
+          } else {
+            // code block next — remove cursor until it advances
+            removeCursor();
+          }
+        }
         rafId = requestAnimationFrame(tick);
         return;
       }
@@ -121,10 +164,14 @@ export default function TerminalBody() {
       const seg = block.segments[si];
       if (ci < seg.full.length) {
         seg.node.textContent = seg.full.slice(0, ci + 1);
+        placeCursor(seg.node);
         ci++;
       } else {
         si++;
         ci = 0;
+        if (si < block.segments.length) {
+          placeCursor(block.segments[si].node);
+        }
       }
 
       rafId = requestAnimationFrame(tick);
@@ -134,6 +181,7 @@ export default function TerminalBody() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      removeCursor();
       document.removeEventListener('click', revealAll);
       document.removeEventListener('keydown', revealAll);
     };

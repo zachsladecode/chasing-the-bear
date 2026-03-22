@@ -50,12 +50,15 @@ const ogImage = `${siteUrl}/og-default.png`;
     <!-- Feeds -->
     <link rel="alternate" type="application/rss+xml" title="Chasing the Bear RSS Feed" href="/rss.xml" />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/chasing-the-bear-transparent-background.png" />
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <a href="/" class="site-logo">Chasing the Bear</a>
+        <a href="/" class="site-logo">
+          <img src="/chasing-the-bear-logo.png" alt="Chasing the Bear logo" class="site-logo-img" />
+          Chasing the Bear
+        </a>
         <nav class="site-nav" aria-label="Main navigation">
           <a href="/">Home</a>
           <a href="/blog">Blog</a>
@@ -86,6 +89,10 @@ const ogImage = `${siteUrl}/og-default.png`;
   .site-header {
     border-bottom: 1px solid var(--color-border);
     padding: var(--space-4) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-bg);
   }
 
   .container {
@@ -103,6 +110,15 @@ const ogImage = `${siteUrl}/og-default.png`;
     color: var(--color-text);
     text-decoration: none;
     letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .site-logo-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
   }
 
   .site-logo:hover {
@@ -145,11 +161,15 @@ const ogImage = `${siteUrl}/og-default.png`;
 
   .site-footer {
     border-top: 1px solid var(--color-border);
-    padding: var(--space-8) 0;
+    padding: var(--space-4) 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    background-color: var(--color-bg);
   }
 
   .site-footer .container {
-    display: block;
+    justify-content: center;
   }
 
   .site-footer p {
