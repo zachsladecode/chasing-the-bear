@@ -1,54 +1,110 @@
 ---
-title: "What Even Is a Git Worktree?"
-date: "2026-03-21"
+title: "What Is a Git Worktree?"
+date: "2026-03-23"
 category: "Software Engineering"
 tags: ["git", "tooling", "workflow"]
 summary: "You have been switching branches and stashing work for years. There is a better way — and it has been in Git the whole time."
-draft: true
+draft: false
 ---
 
-You have been switching branches and stashing work for years. There is a better way.
+Working as a software engineer, I frequently have to switch between multiple tasks. Stashing changes in one branch to resume work in another or spinning up an entirely new branch for a critical hot fix. Up until recently I thought that was just par for the course.
 
-A Git worktree lets you check out multiple branches of the same repo simultaneously — each in its own directory, sharing one `.git` folder.
+But that's not the case. Git worktrees let you check out multiple branches of the same repo simultaneously — each in its own directory, all backed by the same underlying history and object store.
 
-## The Problem
+Baz Luhrmann said the real troubles in your life are *"the kind that blindside you at 4:00 pm on some idle Tuesday."* He was talking about life. He could have been talking about your git workflow.
 
-The typical workflow: you are deep in a feature branch, someone pings you about a bug on main, you stash everything, switch branches, fix the bug, switch back, pop the stash, try to remember where you were. It works, but it is friction.
+Here's the scenario that made me actually go looking for something better. Three days into a feature — nothing committed yet, just a pile of half-finished changes and a mental map of what you're building. Then the ping comes. Production is down. Can you look at it?
 
-## What a Worktree Does
+Now you're running through your options:
 
-```bash
-# Add a new worktree for the hotfix branch
-git worktree add ../chasing-the-bear-hotfix hotfix/urgent-bug
+## The Three Options — and Why Two of Them Suck
 
-# Work in it like a normal repo
-cd ../chasing-the-bear-hotfix
-git commit -am "fix: patch the thing"
+**Option 1: Commit the WIP.** Just get your changes out of the way. You add everything, write `"wip"` in the commit message, and feel a little gross about it. Your git log now reads: `wip`, `temp`, `DO NOT MERGE`. Fine, it works — but it's not how you want to work.
 
-# Remove it when done
-git worktree remove ../chasing-the-bear-hotfix
+**Option 2: Stash.** `git stash` saves your work in a little bundle off to the side. You switch branches, fix the bug, come back, run `git stash pop`. Most of the time it's fine. But stash is fragile. Easy to forget what you stashed. Dangerous to pop if you've stashed multiple things. And if something goes sideways during the pop, you're untangling a mess. It's the right tool, just for the wrong job.
+
+Neither feels great. Both feel like workarounds. Because they are.
+
+There's a third option. It's been in Git the whole time. You just weren't told about it.
+
+## Let Me Give You a Mental Model First
+
+Here's the honest version: a worktree does put another set of source files on disk. You're not getting something for nothing.
+
+What you're *not* duplicating is the `.git` folder — the thing that stores all your history, every commit, every object ever written. In a mature repo, that's where the real weight lives. The source files are small by comparison.
+
+So think of it less like "no duplication" and more like: **two working directories, one git history**. You pay for the extra checkout, but you don't pay for the extra past.
+
+## So What Actually Is a Worktree?
+
+A worktree is just a working directory — a folder on disk with a checked-out version of your project. You already have one. Every single clone creates a default worktree automatically. The `git worktree` feature just lets you add more.
+
+Each additional worktree is checked out to a different branch. Under the hood, the linked worktree contains a `.git` file — not a folder — that's a pointer back to an admin directory inside the main repo's `.git/worktrees/`. The object store, history, and refs all live in the original `.git/`. The working files and checkout state are separate per worktree; everything else is shared.
+
+Here's what that looks like on disk:
+
+```text
++---------------------------------------+
+|        .git/  (your repository)       |
+|  history . branches . commits . all   |
++-------------------+-------------------+
+                    |
+          +---------+---------+
+          |                   |
++---------+------+   +--------+---------+
+|    my-app/     |   |  my-app-hotfix/  |
+|  [feature/     |   |  [hotfix/        |
+|   dashboard]   |   |   login-bug]     |
++----------------+   +------------------+
+  working dir 1         working dir 2
 ```
 
-Both directories share the same object store and refs — no duplication, instant checkout.
+Two folders. One git history. Both fully live.
 
-## When to Use It
+## What It's NOT
 
-- Reviewing a PR without leaving your current branch
-- Running a long build in one branch while continuing work in another
-- Keeping a `main` worktree always ready for hotfixes
+A few things to clear up before they become assumptions:
 
-## When Not To
+- **Not a clone.** You get another set of checked-out files, yes — but no duplicated `.git` folder, no separate history, no second copy of every commit.
+- **Not a branch trick.** You're not switching branches on one directory — you have *two directories on disk at the same time*.
+- **Not magic.** It's a folder. You `cd` into it. Your editor opens it. It behaves like any other project directory.
 
-Each worktree has its own `HEAD` and index, but they share the same refs. Because of this, Git prevents you from checking out the same branch in two worktrees simultaneously — doing so would mean two worktrees updating the same ref independently, which would corrupt the branch. They also add a little mental overhead — if you are not juggling multiple branches regularly, `git stash` is fine.
+One-liner: it's just a folder that knows which branch it's on.
 
-## How Git Tracks Them
+## Why Not Just Clone the Repo Twice?
 
-When you add a worktree, Git writes a reference to it inside the `.git/worktrees/` directory. You can see all active worktrees at any time:
+Fair question — some people do this, and it kind of works. Here's why it falls apart:
+
+**Duplicate history on disk.** Two full `.git` folders storing the same data. If your repo history is large, that adds up fast.
+
+**Separate remotes to maintain.** `git fetch` in one clone doesn't update the other. You're now managing two independent copies of the same project.
+
+**No guardrails.** Nothing stops you from checking out the same branch in both clones and making conflicting changes. Git has no idea — they're just two separate repos as far as it knows.
+
+With worktrees:
+
+- One `.git`. No duplication.
+- `git fetch` from any worktree updates all of them.
+- Git actively **prevents** checking out the same branch in two worktrees simultaneously — multiple views of the same project, using the same repository instance.
+
+## A Quick Peek
+
+I won't get into the full command set yet — that's the next post. But here's what it looks like when you have two worktrees running:
 
 ```bash
-git worktree list
+$ git worktree list
+/Users/zach/projects/my-app          a3f92c1 [feature/new-dashboard]
+/Users/zach/projects/my-app-hotfix   b74e210 [hotfix/login-bug]
 ```
 
-This shows the path, the commit hash, and which branch is checked out in each. Removing a worktree cleans up that reference automatically — no leftover state.
+Two directories. Same repo. No stash. No WIP commit.
 
-> The right tool depends on your workflow. But if you find yourself stashing and switching multiple times a day, worktrees are worth learning.
+You fix the hotfix in `my-app-hotfix/`, merge it, then `cd` back to `my-app/` — and your feature is exactly where you left it.
+
+## The Scenario, Resolved
+
+You get the ping. Instead of stashing or committing garbage, you run one command. A new folder appears. You fix the bug. You merge. You `cd` back. Your feature is untouched.
+
+That's it. That's the whole pitch.
+
+Next up: let's actually build one. I'll walk you through the full command set using exactly this scenario — you're mid-feature, prod breaks, and you have 10 minutes.
