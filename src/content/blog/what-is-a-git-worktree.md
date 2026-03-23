@@ -1,73 +1,110 @@
 ---
-title: "What Even Is a Git Worktree?"
-date: "2026-03-21"
+title: "What Is a Git Worktree?"
+date: "2026-03-23"
 category: "Software Engineering"
 tags: ["git", "tooling", "workflow"]
 summary: "You have been switching branches and stashing work for years. There is a better way — and it has been in Git the whole time."
 draft: false
 ---
 
-You are twenty minutes deep into a feature. You have half a function written, two files open, and a mental model of what you are building that took a while to construct. Then someone messages you: "hey, can you look at this bug on main real quick?"
+Working as a software engineer, I frequently have to switch between multiple tasks. Stashing changes in one branch to resume work in another or spinning up an entirely new branch for a critical hot fix. Up until recently I thought that was just par for the course.
 
-And now you have a decision to make.
+But that's not the case. Git worktrees let you check out multiple branches of the same repo simultaneously — each in its own directory, sharing one `.git` folder.
 
-## The three options
+Baz Luhrmann said the real troubles in your life are *"the kind that blindside you at 4:00 pm on some idle Tuesday."* He was talking about life. He could have been talking about your git workflow.
 
-Most developers land on one of two moves here, and neither feels great.
+Here's the scenario that made me actually go looking for something better. Three days into a feature — nothing committed yet, just a pile of half-finished changes and a mental map of what you're building. Then the ping comes. Production is down. Can you look at it?
 
-**Option one: commit what you have.** Works, but now your history has a "WIP: halfway through the thing" commit that you will need to clean up later. If you forget, it lives there forever, quietly judging you.
+Now you're running through your options:
 
-**Option two: stash it.** `git stash` was built for exactly this situation, and it is fine — until you have three stashes with unhelpful names, or you pop the wrong one, or you forget a stash exists and then later find it like a sticky note from past you with no context.
+## The Three Options — and Why Two of Them Suck
 
-There is a third option most developers do not know exists: **add a new worktree**.
+**Option 1: Commit the WIP.** Just get your changes out of the way. You add everything, write `"wip"` in the commit message, and feel a little gross about it. Your git log now reads: `wip`, `temp`, `DO NOT MERGE`. Fine, it works — but it's not how you want to work.
 
-## What a worktree actually is
+**Option 2: Stash.** `git stash` saves your work in a little bundle off to the side. You switch branches, fix the bug, come back, run `git stash pop`. Most of the time it's fine. But stash is fragile. Easy to forget what you stashed. Dangerous to pop if you've stashed multiple things. And if something goes sideways during the pop, you're untangling a mess. It's the right tool, just for the wrong job.
 
-When you clone a repo, two things happen. Git downloads the repository itself — all the commits, all the branches, the full history — into a `.git` folder. Then it creates a *working directory*: the folder you actually open in your editor with your project files checked out.
+Neither feels great. Both feel like workarounds. Because they are.
 
-That working directory is a worktree. You have been using one this whole time.
+There's a third option. It's been in Git the whole time. You just weren't told about it.
 
-What most people do not know is that a single Git repository can have *multiple* working directories attached to it simultaneously. You can check out `main` in one folder and `hotfix/urgent-bug` in another folder, both pointing at the same `.git` folder, both fully functional.
+## Let Me Give You a Mental Model First
 
-That is a Git worktree.
+Here's the honest version: a worktree does put another set of source files on disk. You're not getting something for nothing.
 
-## Why not just clone the repo twice?
+What you're *not* duplicating is the `.git` folder — the thing that stores all your history, every commit, every object ever written. In a mature repo, that's where the real weight lives. The source files are small by comparison.
 
-This is the question that comes up every time. Cloning twice gives you two separate working directories — why not just do that?
+So think of it less like "no duplication" and more like: **two working directories, one git history**. You pay for the extra checkout, but you don't pay for the extra past.
 
-A few reasons.
+## So What Actually Is a Worktree?
 
-**You duplicate the history.** A clone stores a full copy of every object in the repository. For a large repo with years of commits, that is a lot of disk space, multiplied by however many copies you make.
+A worktree is just a working directory — a folder on disk with a checked-out version of your project. You already have one. Every single clone creates a default worktree automatically. The `git worktree` feature just lets you add more.
 
-**You have to keep them in sync manually.** Run `git fetch` in one clone, and the other one has no idea. You need to remember to update every clone separately. Miss one and you are working with stale branch information.
+Each additional worktree is checked out to a different branch, and they're all tied to the same `.git` folder — the folder where git stores everything: history, branches, commits, all of it.
 
-**You lose branch protection.** Git will not let you check out the same branch in two worktrees at the same time. That sounds like a restriction, but it is actually a feature — it prevents you from making conflicting changes to the same branch from two different locations and wondering why things are broken. Two clones have no such protection. Nothing stops you from opening the same branch in both and making a mess.
+Here's what that looks like on disk:
 
-With a proper worktree, all of that goes away. One `.git` folder. One fetch to update everything. Shared history, shared refs, and Git actively protecting you from the footgun.
+```
++---------------------------------------+
+|        .git/  (your repository)       |
+|  history . branches . commits . all   |
++-------------------+-------------------+
+                    |
+          +---------+---------+
+          |                   |
++---------+------+   +--------+---------+
+|    my-app/     |   |  my-app-hotfix/  |
+|  [feature/     |   |  [hotfix/        |
+|   dashboard]   |   |   login-bug]     |
++----------------+   +------------------+
+  working dir 1         working dir 2
+```
 
-## The mental model
+Two folders. One git history. Both fully live.
 
-The framing that clicked for me: **a worktree is a view, not a copy**.
+## What It's NOT
 
-When you add a worktree, you are asking Git to open a new window into the same repository — a different working directory with a different branch checked out. The underlying repo is unchanged. You are not duplicating anything; you are just looking at it from another angle.
+A few things to clear up before they become assumptions:
 
-Think of it like having multiple tabs open in your editor. Same project, same files on disk, different context in each tab. Switching tabs does not copy the project — it just changes what you are looking at. Worktrees are similar, except the "tabs" are real directories on your filesystem with their own `HEAD`, their own index, and their own uncommitted changes.
+- **Not a clone.** You get another set of checked-out files, yes — but no duplicated `.git` folder, no separate history, no second copy of every commit.
+- **Not a branch trick.** You're not switching branches on one directory — you have *two directories on disk at the same time*.
+- **Not magic.** It's a folder. You `cd` into it. Your editor opens it. It behaves like any other project directory.
 
-That last part is the key difference from stashing. When you stash, you are hiding your work to get it out of the way. When you add a worktree, your work just *stays where it is*. You walk over to a different room. The first room does not disappear.
+One-liner: it's just a folder that knows which branch it's on.
 
-## When to reach for it
+## Why Not Just Clone the Repo Twice?
 
-Worktrees are not a replacement for stashing — they are a different tool for different situations. Stash is fine for quick, low-stakes context switches. Worktrees earn their keep when:
+Fair question — some people do this, and it kind of works. Here's why it falls apart:
 
-- You need to review a pull request without abandoning your current branch
-- You are running a long build or test suite in one branch and want to keep working in another
-- You keep a `main` worktree always clean and ready so you can respond to production issues immediately
-- You are doing anything that benefits from having two branches side by side on disk at the same time
+**Duplicate history on disk.** Two full `.git` folders storing the same data. If your repo history is large, that adds up fast.
 
-The overhead is minimal. Adding a worktree takes one command. Removing it takes one command. The repo itself is untouched.
+**Separate remotes to maintain.** `git fetch` in one clone doesn't update the other. You're now managing two independent copies of the same project.
 
-## What comes next
+**No guardrails.** Nothing stops you from checking out the same branch in both clones and making conflicting changes. Git has no idea — they're just two separate repos as far as it knows.
 
-This post covers the concept. The next one goes hands-on: the actual commands, flags worth knowing, how to structure your directories, and the one thing Git will refuse to let you do (and why that is a good thing).
+With worktrees:
 
-If you have been stashing and switching multiple times a day, worktrees are worth fifteen minutes of your time. That is the whole pitch.
+- One `.git`. No duplication.
+- `git fetch` from any worktree updates all of them.
+- Git actively **prevents** checking out the same branch in two worktrees simultaneously — multiple views of the same project, using the same repository instance.
+
+## A Quick Peek
+
+I won't get into the full command set yet — that's the next post. But here's what it looks like when you have two worktrees running:
+
+```bash
+$ git worktree list
+/Users/zach/projects/my-app          a3f92c1 [feature/new-dashboard]
+/Users/zach/projects/my-app-hotfix   b74e210 [hotfix/login-bug]
+```
+
+Two directories. Same repo. No stash. No WIP commit.
+
+You fix the hotfix in `my-app-hotfix/`, merge it, then `cd` back to `my-app/` — and your feature is exactly where you left it.
+
+## The Scenario, Resolved
+
+You get the ping. Instead of stashing or committing garbage, you run one command. A new folder appears. You fix the bug. You merge. You `cd` back. Your feature is untouched.
+
+That's it. That's the whole pitch.
+
+Next up: let's actually build one. I'll walk you through the full command set using exactly this scenario — you're mid-feature, prod breaks, and you have 10 minutes.
