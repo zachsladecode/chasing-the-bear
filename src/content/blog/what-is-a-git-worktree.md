@@ -43,7 +43,7 @@ Each additional worktree is checked out to a different branch. Under the hood, t
 
 Here's what that looks like on disk:
 
-```
+```text
 +---------------------------------------+
 |        .git/  (your repository)       |
 |  history . branches . commits . all   |
