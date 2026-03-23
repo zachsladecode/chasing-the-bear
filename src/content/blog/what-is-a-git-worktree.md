@@ -9,7 +9,7 @@ draft: false
 
 Working as a software engineer, I frequently have to switch between multiple tasks. Stashing changes in one branch to resume work in another or spinning up an entirely new branch for a critical hot fix. Up until recently I thought that was just par for the course.
 
-But that's not the case. Git worktrees let you check out multiple branches of the same repo simultaneously — each in its own directory, sharing one `.git` folder.
+But that's not the case. Git worktrees let you check out multiple branches of the same repo simultaneously — each in its own directory, all backed by the same underlying history and object store.
 
 Baz Luhrmann said the real troubles in your life are *"the kind that blindside you at 4:00 pm on some idle Tuesday."* He was talking about life. He could have been talking about your git workflow.
 
@@ -39,7 +39,7 @@ So think of it less like "no duplication" and more like: **two working directori
 
 A worktree is just a working directory — a folder on disk with a checked-out version of your project. You already have one. Every single clone creates a default worktree automatically. The `git worktree` feature just lets you add more.
 
-Each additional worktree is checked out to a different branch, and they're all tied to the same `.git` folder — the folder where git stores everything: history, branches, commits, all of it.
+Each additional worktree is checked out to a different branch. Under the hood, the linked worktree contains a `.git` file — not a folder — that's a pointer back to an admin directory inside the main repo's `.git/worktrees/`. The object store, history, and refs all live in the original `.git/`. The working files and checkout state are separate per worktree; everything else is shared.
 
 Here's what that looks like on disk:
 
