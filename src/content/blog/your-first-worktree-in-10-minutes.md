@@ -4,7 +4,7 @@ date: "2026-03-24"
 category: "Software Engineering"
 tags: ["git", "tooling", "workflow"]
 summary: "Enough theory. Here's the full command set — walk through your first git worktree using exactly the scenario that makes it click."
-draft: true
+draft: false
 ---
 
 My last post ended with a promise that I would help alleviate stress when you've already committed effort to a mental model and you have to stop to turn your attention to an urgent new task.
