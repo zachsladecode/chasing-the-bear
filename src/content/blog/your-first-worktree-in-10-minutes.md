@@ -7,13 +7,13 @@ summary: "Enough theory. Here's the full command set — walk through your first
 draft: true
 ---
 
-My last post ended with a promise that I would help alleviate stress when you've already committed effort to a mental model and you have to stop to turn your attention to an urgent new task. 
+My last post ended with a promise that I would help alleviate stress when you've already committed effort to a mental model and you have to stop to turn your attention to an urgent new task.
 
 ## Revisiting The Scenario
 
 Your three days into `feature/new-dashboard` with nothing committed. Your mental model is fully loaded.
 
-Then you get a ping that production down with some SSO login bug and you're being tasked to look into it. No three days grace here. But how do you cleanly transition to this ask? 
+Then you get a ping that production down with some SSO login bug and you're being tasked to look into it. No three days grace here. But how do you cleanly transition to this ask?
 
 ## Step 1: Add a Worktree
 
@@ -186,4 +186,4 @@ git worktree prune
 
 That's the whole workflow. One scenario, six commands, no stash, no WIP commits.
 
-Once you've been using worktrees for a week or two, you'll start finding yourself reaching for them in situations you didn't expect. An always-on hotfix worktree. A clean checkout for code review. One per open PR. That's what we'll focus on in the next post. 
+Once you've been using worktrees for a week or two, you'll start finding yourself reaching for them in situations you didn't expect. An always-on hotfix worktree. A clean checkout for code review. One per open PR. That's what we'll focus on in the next post.
