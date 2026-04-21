@@ -65,7 +65,7 @@ const tags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
   <p class="filter-count" id="filter-count" aria-live="polite"></p>
 </div>
 
-<script define:vars={{ posts }}>
+<script>
   const filterBar = document.getElementById('filter-bar');
   const postCards = document.querySelectorAll('[data-post-slug]');
   const countEl = document.getElementById('filter-count');
