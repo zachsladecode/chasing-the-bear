@@ -19,12 +19,12 @@ As a developer, I've wired myself to think of information organized on a vertica
 
 1. Open `chrome://flags/#vertical-tabs` and set it to **Enabled**
 
-![Chrome flags page with Vertical Tabs set to Enabled](../../assets/blog/chrome-vertical-tabs/enable-vertical-tabs-feature.png)
+   ![Chrome flags page with Vertical Tabs set to Enabled](../../assets/blog/chrome-vertical-tabs/enable-vertical-tabs-feature.png)
 
 2. Relaunch Chrome
 3. Right click on any tab and click 'Show Tabs Vertically'
 
-![Right-click context menu showing Show Tabs Vertically option](../../assets/blog/chrome-vertical-tabs/show-tab-vertically.png)
+   ![Right-click context menu showing Show Tabs Vertically option](../../assets/blog/chrome-vertical-tabs/show-tab-vertically.png)
 
 Note: You can always switch back by right clicking on the tab and clicking 'Show Tabs Horizontally'.
 
