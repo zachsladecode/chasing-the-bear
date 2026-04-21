@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "stray=$(find /Users/zachleavitt/Documents/GitHub/zachsladecode/chasing-the-bear -maxdepth 1 -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.gif' -o -name '*.webp' 2>/dev/null | grep -v node_modules); if [ -n \"$stray\" ]; then echo \"IMAGE WARNING: Image files found in project root — move them to src/assets/blog/[post-slug]/ so Astro can optimize them:\\n$stray\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
