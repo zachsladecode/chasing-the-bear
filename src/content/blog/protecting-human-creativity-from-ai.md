@@ -18,11 +18,11 @@ I started this blog acknowledging the anxiety that AI might one day replace cert
 
 Blogging. Photography. Singing in the shower. Literally anything I’d call mine. I don’t want my creativity being turned into output for a machine.
 
-I’m finally learning what actually exists to protect creative work from being scraped up as training data without anyone even asking. I was glad to find a little more than I expected, and it seems relatively straightforward to set up. 
+I’m finally learning what actually exists to protect creative work from being scraped up as training data without anyone even asking. I was glad to find a little more than I expected, and it seems relatively straightforward to set up.
 
 ## The Human Consent Registry
 
-The first thing I came across was id.humanconsent.org, run by the Human Consent Foundation. It’s a public, machine-readable record where a person documents how AI is (or isn’t) allowed to use their likeness, voice, movement, etc. 
+The first thing I came across was id.humanconsent.org, run by the Human Consent Foundation. It’s a public, machine-readable record where a person documents how AI is (or isn’t) allowed to use their likeness, voice, movement, etc.
 
 Everyone can decide whether AI should be prohibited, permitted with terms, or permitted outright to use their creative works. It’s pretty straightforward. It’s not a licensing body, and it doesn’t enforce anything on its own. If you think about it, it’s almost closer to a robots.txt for your identity, a clear, readable statement that a compliant system can check before it uses something of yours.
 
@@ -40,7 +40,7 @@ As someone with a few websites, some of which have creative work, I found that t
 
 If you'd rather set it at the server level, there's an HTTP header equivalent:
 
-```
+```text
 X-Robots-Tag: noai, noimageai
 ```
 
@@ -52,11 +52,10 @@ So the problem remains largely unsolved, and it’s more like a norm that’s st
 
 ## What I'm actually doing
 
-I added the `noai, noimageai` meta tag to this site's base layout in the same pull request as this blog post, so it's on every page, not just this one. It was a very quick ask, only taking a few minutes. Yes, Claude helped me configure it (I know, the irony). 
+I added the `noai, noimageai` meta tag to this site's base layout in the same pull request as this blog post, so it's on every page, not just this one. It was a very quick ask, only taking a few minutes. Yes, Claude helped me configure it (I know, the irony).
 
-I’ve already registered some of my content on the Human Consent Registry, mostly because I’d rather have a voice documented saying what I consent to. As opposed to letting AI have free rein over me. 
+I’ve already registered some of my content on the Human Consent Registry, mostly because I’d rather have a voice documented saying what I consent to. As opposed to letting AI have free rein over me.
 
 Maybe resistance is futile. I know that neither of these stops anything by force. But I keep coming back to the same lesson I’ve been learning about the bear in general: I can’t control what the tools do. I can control whether I said something about it first.
 
-If you run a site or publish anything you’d call creative work, both of these take less time than reading this post did. Why are you still reading? 
-
+If you run a site or publish anything you’d call creative work, both of these take less time than reading this post did. Why are you still reading?
