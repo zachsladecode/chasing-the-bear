@@ -3,7 +3,7 @@ title: "Protecting Human Creativity From AI"
 date: "2026-08-30"
 category: "AI/ML"
 tags: ["ai", "creativity", "consent"]
-summary: "My day job already feels like it's slipping away to AI. I don't want my creativity to be next. Here's what I'm learning about noai tags and consent registries, and what I'm actually doing about it."
+summary: "My day job already feels replaceable. I don't want my creativity to be next, so I'm looking into noai tags and the Human Consent Registry."
 author: "Zach Slade Code"
 draft: true
 ---
