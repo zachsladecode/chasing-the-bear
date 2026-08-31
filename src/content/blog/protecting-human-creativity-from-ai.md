@@ -5,7 +5,7 @@ category: "AI/ML"
 tags: ["ai", "creativity", "consent"]
 summary: "My day job already feels replaceable. I don't want my creativity to be next, so I'm looking into noai tags and the Human Consent Registry."
 author: "Zach Slade Code"
-draft: true
+draft: false
 ---
 
 Well, here we are; we made it past Judgment Day.
